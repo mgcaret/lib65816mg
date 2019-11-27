@@ -135,6 +135,7 @@ extern word32   cpu_cycle_count;
 #define M_READ_OPCODE(a)  MEM_readMem(a, cpu_cycle_count, EMUL_PIN_SYNC)
 #define M_READ_VECTOR(a)  MEM_readMem(a, cpu_cycle_count, EMUL_PIN_VP)
 #define M_WRITE(a,v)      MEM_writeMem((a),(v), cpu_cycle_count)
+#define E_TRACE(r, a, m, o) CPU_trace(r, a, m, o)
 
 
 /* Set this macro to your emulator's "update" routine. Your update
@@ -221,6 +222,9 @@ void EMUL_handleWDM(byte opcode, word32 timestamp);
 void EMUL_hardwareUpdate(word32 timestamp);
 byte MEM_readMem(word32 address, word32 timestamp, word32 emulFlags);
 void MEM_writeMem(word32 address, byte b, word32 timestamp);
+#ifdef E_TRACE
+void CPU_trace(char *regs, char *addr, char *mnem, char *oper);
+#endif
 
 #endif /* _CPU_H */
 

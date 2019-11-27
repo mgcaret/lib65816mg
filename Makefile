@@ -23,9 +23,10 @@ $(call subdir,src)
 
 configure: $(ALL_CONFIG)
 
-libs: $(ALL_LIBS)
+libs: lib65816/config.h $(ALL_LIBS)
 
 clean: $(ALL_CLEAN)
 
-install: $(ALL_INSTALLS)
+install: lib65816/config.h $(ALL_INSTALLS)
 
+lib65816/config.h: $(ALL_CONFIG)

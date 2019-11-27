@@ -129,14 +129,31 @@ void CPU_debug(void) {
 	int	operand;
     int ea;
     char operands[40];
+#ifdef E_TRACE
+  char registers[60];
+  char address[10];
+  char mnemonic[4];
+#endif
 
 	opcode = M_READ(PC.A);
 	mode = addrmodes[opcode];
+#ifdef E_TRACE
+	sprintf(registers, "A=%04X X=%04X Y=%04X S=%04X D=%04X B=%02X P=%02X E=%1d",(int) A.W, (int) X.W,
+									   (int) Y.W, (int) S.W,
+									   (int) D.W, (int) DB,
+									   (int) P, (int) E);
+#else
 	printf("A=%04X X=%04X Y=%04X S=%04X D=%04X B=%02X P=%02X E=%1d  ",(int) A.W, (int) X.W,
 									   (int) Y.W, (int) S.W,
 									   (int) D.W, (int) DB,
 									   (int) P, (int) E);
+#endif
+#ifdef E_TRACE
+  sprintf(address, "%02X/%04X", (int) PC.B.PB,(int) PC.W.PC);
+  sprintf(mnemonic, "%s", mnemonics[opcode]);
+#else
 	printf("%02X/%04X  %s ",(int) PC.B.PB,(int) PC.W.PC,mnemonics[opcode]);
+#endif
 	switch (mode) {
         case IMM8:
             sprintf( operands, "#$%02X", M_READ(PC.A+1) );
@@ -312,8 +329,12 @@ void CPU_debug(void) {
             sprintf( operands, "$%02X, $%02X", M_READ(PC.A+2), M_READ(PC.A+1) );
             break;
 	}
+#ifdef E_TRACE
+    E_TRACE(registers, address, mnemonic, operands);
+#else
     printf( "%s\n", operands );
 	fflush(stdout);
+#endif
 }
 
 #endif
